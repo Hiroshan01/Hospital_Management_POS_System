@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash,session
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -20,6 +20,13 @@ def dashbord():
    
 
     return render_template('base.html')
+
+#Log out function
+@app.route('/logout')
+def logout():
+    session.clear()  # Clear the session
+    return redirect(url_for('dashbord'))  # Redirect to the dashboard route
+
 
 
 @app.route('/admin', methods=['GET', 'POST'])
