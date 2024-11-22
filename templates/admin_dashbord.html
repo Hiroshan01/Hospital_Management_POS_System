@@ -68,7 +68,7 @@
         <a href="#stock" data-toggle="collapse">Stock Management</a>
         <a href="#invoice" data-toggle="collapse">Invoice Management</a>
         <a href="#booking" data-toggle="collapse">Booking Management</a>
-        <a href="logout.html">Logout</a>
+        <a href="#base.html">Logout</a>
     </div>
 
     <!-- Main Content -->
@@ -101,15 +101,22 @@
                                     <td>{{stocks [2]}}</td>
                                     <td>{{stocks [3]}}</td>
                                     <td>
+                                        
                                         <a href="{{ url_for('update_stock', id=stocks[0]) }}" class="btn btn-primary btn-sm">Update</a>
-                                        <a href="{{ url_for('delete_stock', id=stocks[0]) }}" class="btn btn-danger btn-sm">Delelte</a>
+                                        <a href="{{ url_for('delete_stock', id=stocks[0]) }}" class="btn btn-danger btn-sm">Delete</a>
+                                        
                                       
                                     </td>
                                 </tr>
                                 {% endfor %}
                                 <!-- Repeat for other stock items -->
                             </tbody>
+                            <!-- Button to Open the Modal -->
+
                         </table>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStockModal">
+                            Add Stock
+                        </button>
                         
                     </div>
                 </div>
@@ -182,7 +189,6 @@
 
         </div>
     </div>
-
 <!-- Modal for Add Stock -->
 <div class="modal fade" id="addStockModal" tabindex="-1" aria-labelledby="addStockModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -218,10 +224,6 @@
     </div>
 </div>
 
-<!-- Button to Open the Modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStockModal">
-    Add Stock
-</button>
 
 
 
