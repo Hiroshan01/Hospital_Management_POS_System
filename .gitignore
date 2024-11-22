@@ -1,0 +1,14 @@
+# Byte-compiled files
+*.pyc
+__pycache__/
+
+# Virtual environments
+venv/
+env/
+
+# Database files
+*.sqlite3
+
+# Flask instance and configuration files
+instance/
+.env

@@ -17,3 +17,6 @@
     cursor.execute('SELECT * FROM stock')
     stock_items = cursor.fetchall()
     cursor.close()
+
+
+<a href="{{ url_for('delete_stock', id=stocks[0]) }}" class="btn btn-danger btn-sm">Delete</a>

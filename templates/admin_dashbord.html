@@ -94,20 +94,23 @@
                             </thead>
                             <tbody>
                                 <!-- Dynamic content here (list of stock items) -->
+                                {% for stocks in stock %}
                                 <tr>
-                                    <td>Item 1</td>
-                                    <td>100</td>
-                                    <td>$10.00</td>
-                                    <td>10</td>
+                                    <td>{{stocks [0]}}</td>
+                                    <td>{{stocks [1]}}</td>
+                                    <td>{{stocks [2]}}</td>
+                                    <td>{{stocks [3]}}</td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm">Update</button>
-                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                        <a href="{{ url_for('update_stock', id=stocks[0]) }}" class="btn btn-primary btn-sm">Update</a>
+                                        <a href="{{ url_for('delete_stock', id=stocks[0]) }}" class="btn btn-danger btn-sm">Delelte</a>
+                                      
                                     </td>
                                 </tr>
+                                {% endfor %}
                                 <!-- Repeat for other stock items -->
                             </tbody>
                         </table>
-                        <button class="btn btn-custom btn-sm" data-toggle="modal" data-target="#addStockModal">Add Stock</button>
+                        
                     </div>
                 </div>
             </div>
@@ -180,40 +183,49 @@
         </div>
     </div>
 
-    <!-- Modal for Add Stock -->
-    <div class="modal fade" id="addStockModal" tabindex="-1" aria-labelledby="addStockModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addStockModalLabel">Add New Stock</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="item-name">Item Name</label>
-                            <input type="text" class="form-control" id="item-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="quantity">Quantity</label>
-                            <input type="number" class="form-control" id="quantity" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price</label>
-                            <input type="number" class="form-control" id="price" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="reorder-level">Reorder Level</label>
-                            <input type="number" class="form-control" id="reorder-level" required>
-                        </div>
-                        <button type="submit" class="btn btn-custom btn-block">Add Stock</button>
-                    </form>
-                </div>
+<!-- Modal for Add Stock -->
+<div class="modal fade" id="addStockModal" tabindex="-1" aria-labelledby="addStockModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStockModalLabel">Add New Stock</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('add_stock') }}">
+                    <div class="form-group">
+                        <label for="item-name">Item Name</label>
+                        <input type="text" class="form-control" id="item-name" name="item-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reorder-level">Reorder Level</label>
+                        <input type="number" class="form-control" id="reorder-level" name="reorder-level" required>
+                    </div>
+                    <button type="submit" class="btn btn-custom btn-block">Add Stock</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStockModal">
+    Add Stock
+</button>
+
+
+
+
 
     <!-- Scripts for Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
