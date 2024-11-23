@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash,session
 from flask_mysqldb import MySQL
+from models.registration import register_user
+
 
 app = Flask(__name__)
 
@@ -146,10 +148,15 @@ def contact_main():
 
 
 #registration
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register_main():
+      if request.method == 'POST':
+        # Call the function from register.py
+        message = register_user(mysql)
+        return render_template('registration.html', message=message)
+      return render_template('registration.html')
 
-    return render_template(('main_pages/registration.html'))
+    
 
 
 #main home routing path
