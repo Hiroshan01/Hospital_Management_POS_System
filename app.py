@@ -16,10 +16,13 @@ mysql = MySQL(app)
 app.config['SECRET_KEY'] = 'Hiroshan1999'
 
 @app.route('/', methods=['GET', 'POST'])
-def dashbord():
-   
+def home():
+    return render_template('main_pages/index.html')
 
+@app.route('/dashbord1')
+def dashboard_admin():
     return render_template('base.html')
+
 
 #Log out function
 @app.route('/logout')
@@ -53,7 +56,7 @@ def admin():
                 return redirect(url_for('dashbord'))  # Redirect to home if failed
         except Exception as e:
             flash('An error occurred: ' + str(e))
-            return redirect(url_for('dashbord'))  # Redirect to home on error
+            return redirect(url_for('admin_dashbord'))  # Redirect to home on error
 
     return render_template('admin.html')  
 
@@ -113,6 +116,55 @@ def delete_stock(id):
     cur.execute("DELETE FROM stock WHERE id = %s", (id,))
     mysql.connection.commit()
     return redirect(url_for('admin_dashbord'))
+
+#about mainpage
+
+#main page appoiment
+@app.route('/about')
+def about_main():
+
+    return render_template(('main_pages/about.html'))
+
+#main page docter page
+@app.route('/doctor')
+def doctor_main():
+
+    return render_template('main_pages/doctors.html')
+
+#main apge gallery
+@app.route('/gallery')
+def gallery_main():
+
+    return render_template('main_pages/gallery.html')
+
+#main page contact
+@app.route('/contact')
+def contact_main():
+
+    return render_template('main_pages/contact.html')
+
+
+
+#registration
+@app.route('/register')
+def register_main():
+
+    return render_template(('main_pages/registration.html'))
+
+
+#main home routing path
+@app.route('/login')
+def login_main():
+
+    return render_template(('main_pages/login.html'))
+
+#main page appoiment
+@app.route('/booking')
+def appoiment_main():
+
+    return render_template(('main_pages/appointment.html'))
+
+
 
 
 

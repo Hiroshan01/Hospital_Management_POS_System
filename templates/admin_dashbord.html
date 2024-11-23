@@ -30,7 +30,7 @@
         }
 
         .sidebar a:hover {
-            background-color: #575757;
+            background-color:#72c02c;
             color: #f1f1f1;
         }
 
@@ -51,12 +51,12 @@
         }
 
         .btn-custom {
-            background-color: #007bff;
+            background-color: #72c02c;
             color: white;
         }
 
         .btn-custom:hover {
-            background-color: #0056b3;
+            background-color: #72c02c;
         }
     </style>
 </head>
@@ -68,7 +68,7 @@
         <a href="#stock" data-toggle="collapse">Stock Management</a>
         <a href="#invoice" data-toggle="collapse">Invoice Management</a>
         <a href="#booking" data-toggle="collapse">Booking Management</a>
-        <a href="{{ url_for('dashbord') }}">Logout</a>
+        <a href="{{ url_for('dashboard_admin') }}">Logout</a>
     </div>
 
     <!-- Main Content -->
@@ -85,6 +85,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Item ID</th>
                                     <th>Item Name</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
@@ -100,6 +101,7 @@
                                     <td>{{stocks [1]}}</td>
                                     <td>{{stocks [2]}}</td>
                                     <td>{{stocks [3]}}</td>
+                                    <td>{{stocks [4]}}</td>
                                     <td>
                                         
                                         <a href="{{ url_for('update_stock', id=stocks[0]) }}" class="btn btn-primary btn-sm">Update</a>
