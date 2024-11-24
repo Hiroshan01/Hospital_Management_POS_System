@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash,session
 from flask_mysqldb import MySQL
-from models.registration import register_user
+
 
 
 app = Flask(__name__)
@@ -145,16 +145,33 @@ def contact_main():
 
     return render_template('main_pages/contact.html')
 
+#main page contact
+@app.route('/registration')
+def register_main():
+
+    return render_template('main_pages/registration.html')
+
+
 
 
 #registration
-@app.route('/register', methods=['GET', 'POST'])
-def register_main():
-      if request.method == 'POST':
-        # Call the function from register.py
-        message = register_user(mysql)
-        return render_template('registration.html', message=message)
-      return render_template('registration.html')
+@app.route('/registerDB', methods=['GET', 'POST'])
+def register_DB():
+    if request.method == 'POST':
+
+            first_name = request.form['first-name']
+            last_name = request.form['last-name']
+            email=request.form['email']
+            password=request.form['password']    
+            cur=mysql.connection.cursor() #interact with DB
+            cur.execute("INSERT INTO registration (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)", (first_name,  last_name, email,password ))
+            mysql.connection.commit() # save
+            cur.close()  # Close the cursor
+            return redirect(url_for('login_main'))
+    return redirect(url_for('register_main'))
+
+    
+        
 
     
 
