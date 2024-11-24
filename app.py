@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash,session
 from flask_mysqldb import MySQL
 
-
-
 app = Flask(__name__)
+#-----------------------------------------Database Connection----------------------------#
 
 # MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
@@ -13,18 +12,21 @@ app.config['MYSQL_DB'] = 'hospital_management_system'
   # DB name for your POS system
 
 mysql = MySQL(app)
+#-----------------------------------------Database Connection End ----------------------------#
 
 # Set a secret key (replace with a long, random, unique string)
 app.config['SECRET_KEY'] = 'Hiroshan1999'
 
+#-----------------------------------------Main Page Route----------------------------#
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('main_pages/index.html')
+#-----------------------------------------Main Page Route----------------------------#
 
 @app.route('/dashbord1')
 def dashboard_admin():
     return render_template('base.html')
-
 
 #Log out function
 @app.route('/logout')
@@ -33,7 +35,7 @@ def logout():
     return redirect(url_for('dashbord'))  # Redirect to the dashboard route
 
 
-
+#-----------------------------------------Admin credintial----------------------------#
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
@@ -61,13 +63,22 @@ def admin():
             return redirect(url_for('admin_dashbord'))  # Redirect to home on error
 
     return render_template('admin.html')  
+#-----------------------------------------Admin credintial End----------------------------#
 
-@app.route('/admin_dashbord')
+
+@app.route('/admin_dashbord_show_details')
 def admin_dashbord():
-    cur=mysql.connection.cursor()
+    # Fetch booking details
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM booking")
+    booking = cur.fetchall()
+    
+    # Fetch stock details
     cur.execute("SELECT * FROM stock")
-    stock=cur.fetchall()
-    return render_template('admin_dashbord.html',stock=stock)
+    stock = cur.fetchall()
+    cur.close()
+    
+    return render_template('admin_dashbord.html', booking=booking, stock=stock)
 
 
 
@@ -83,7 +94,7 @@ def add_stock():
         mysql.connection.commit() # save
         cur.close()  # Close the cursor
         return redirect(url_for('admin_dashbord'))
-    return redirect(url_for('admin_dashbord'))
+    return redirect(url_for(' admin_dashbord'))
 
 #stock update
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -118,7 +129,7 @@ def delete_stock(id):
     cur.execute("DELETE FROM stock WHERE id = %s", (id,))
     mysql.connection.commit()
     return redirect(url_for('admin_dashbord'))
-
+#<-------------------------------Main Page Configuration Part----------------------------------->#
 #about mainpage
 
 #main page appoiment
@@ -145,7 +156,7 @@ def contact_main():
 
     return render_template('main_pages/contact.html')
 
-#main page contact
+#main pager registration
 @app.route('/registration')
 def register_main():
 
@@ -167,14 +178,8 @@ def register_DB():
             cur.execute("INSERT INTO registration (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)", (first_name,  last_name, email,password ))
             mysql.connection.commit() # save
             cur.close()  # Close the cursor
-            return redirect(url_for('login_main'))
+            return redirect(url_for('register_main'))
     return redirect(url_for('register_main'))
-
-    
-        
-
-    
-
 
 #main home routing path
 @app.route('/login')
@@ -188,15 +193,24 @@ def appoiment_main():
 
     return render_template(('main_pages/appointment.html'))
 
-
-
-
-
-
-
-
-    
-
+#main page appoiment
+@app.route('/bookingDB' , methods=['GET', 'POST'])
+def appoiment_DB():
+    if request.method == 'POST':
+           
+        name=request.form['name']
+        email=request.form['email']
+        purpose=request.form['subject']
+        tel_No=request.form['number']
+        department = request.form['department']
+        date=request.form['date']
+        time=request.form['Time']
+        cur=mysql.connection.cursor() #interact with DB
+        cur.execute("INSERT INTO booking(name, email, purpose, mobile_number, department,appointment_date, appointment_time) VALUES (%s, %s, %s, %s, %s, %s, %s)", ( name, email, purpose, tel_No , department , date , time ))
+        mysql.connection.commit() # save
+        cur.close() 
+        return redirect(url_for('login_main'))
+    return redirect(url_for('register_main'))
 
 
 
