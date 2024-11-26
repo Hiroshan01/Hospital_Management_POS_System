@@ -1,0 +1,26 @@
+<!-- user_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Welcome, User</h1>
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" class="btn btn-primary w-100 mb-2">View Profile</a>
+                <a href="#" class="btn btn-secondary w-100 mb-2">Submit Feedback</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger w-100">Logout</a>
+            </div>
+            <div class="col-md-9">
+                <h3>User Actions</h3>
+                <p>View your profile and submit feedback.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,102 +1,65 @@
-from flask import Flask, render_template, request, redirect, url_for, flash,session
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-#-----------------------------------------Database Connection----------------------------#
 
 # MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'  # User root
-app.config['MYSQL_PASSWORD'] = ''  # No password
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'hospital_management_system'
-  # DB name for your POS system
 
 mysql = MySQL(app)
-#-----------------------------------------Database Connection End ----------------------------#
 
 # Set a secret key (replace with a long, random, unique string)
 app.config['SECRET_KEY'] = 'Hiroshan1999'
 
-#-----------------------------------------Main Page Route----------------------------#
-
-@app.route('/', methods=['GET', 'POST'])
+# Main Page Route
+@app.route('/')
 def home():
-    return render_template('main_pages/index.html')
-#-----------------------------------------Main Page Route----------------------------#
-
-@app.route('/dashbord1')
-def dashboard_admin():
     return render_template('base.html')
 
-#Log out function
-@app.route('/logout')
-def logout():
-    session.clear()  # Clear the session
-    return redirect(url_for('dashbord'))  # Redirect to the dashboard route
-
-
-#-----------------------------------------Admin credintial----------------------------#
-@app.route('/admin', methods=['GET', 'POST'])
-def admin():
-    if request.method == 'POST':
-        try: #handle error
-            password = request.form['password']
-            email = request.form['email']
-           
-
-            cur = mysql.connection.cursor()
-            # Fetch the admin user usingg email
-            cur.execute("SELECT * FROM admin WHERE email = %s", (email,))
-            admin_user = cur.fetchone()
-            cur.close()
-
-            print("check -->",admin_user)  
-
-            # Check admin credi..
-            if admin_user and admin_user[1] == password:
-                return redirect(url_for('admin_dashbord'))  # Redirect to admin panel
-            else:
-                flash('Invalid email or password.')
-                return redirect(url_for('dashbord'))  # Redirect to home if failed
-        except Exception as e:
-            flash('An error occurred: ' + str(e))
-            return redirect(url_for('admin_dashbord'))  # Redirect to home on error
-
-    return render_template('admin.html')  
-#-----------------------------------------Admin credintial End----------------------------#
-
-
-@app.route('/admin_dashbord_show_details')
-def admin_dashbord():
-    # Fetch booking details
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM booking")
-    booking = cur.fetchall()
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
     
-    # Fetch stock details
-    cur.execute("SELECT * FROM stock")
-    stock = cur.fetchall()
-    cur.close()
+    # Create a cursor and execute the query
+    cursor = mysql.connection.cursor()
+    query = "SELECT role FROM users WHERE username=%s AND password=%s"
+    cursor.execute(query, (username, password))
+    user = cursor.fetchone()  # Fetch the first matching record
     
-    return render_template('admin_dashbord.html', booking=booking, stock=stock)
+    if user:
+        role = user[0]  # Access the role from the returned tuple
+        session['username'] = username
+        session['role'] = role
 
+        # Role-based redirection
+        if role == 'SuperAdmin':
+            return redirect(url_for('superadmin_dashboard1'))
+        elif role == 'Admin':
+            return redirect(url_for('admin_dashboard'))
+        elif role == 'User':
+            return redirect(url_for('user_dashboard'))
+        elif role == 'Cashier':
+            return redirect(url_for('cashier_dashboard'))
+    else:
+        flash('Invalid username or password')
+        return redirect(url_for('home'))
 
+# SuperAdmin Dashboard Route
+@app.route('/superadmin_db_details')
+def superadmin_dashboard1():
+    # Fetch stock data
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM stock")  
+    stock = cursor.fetchall()
+    print(stock)  # Debugging output
 
-@app.route('/add', methods=['GET','POST'])
-def add_stock():
-    if request.method == 'POST':
-        item_name = request.form['item-name']
-        quantity=request.form['quantity']
-        price=request.form['price']
-        reorder_level=request.form['reorder-level']
-        cur=mysql.connection.cursor() #interact with DB
-        cur.execute("INSERT INTO stock (item_name, quantity, price, reorder_level) VALUES (%s, %s, %s, %s)", (item_name, quantity, price, reorder_level))
-        mysql.connection.commit() # save
-        cur.close()  # Close the cursor
-        return redirect(url_for('admin_dashbord'))
-    return redirect(url_for(' admin_dashbord'))
+    return render_template('superadmin_dashboard.html', stock=stock)
 
-#stock update
+# Stock Update Route
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_stock(id):
     cur = mysql.connection.cursor()
@@ -115,7 +78,7 @@ def update_stock(id):
         
         mysql.connection.commit()  # Save changes
         cur.close()  # Close the cursor
-        return redirect(url_for('admin_dashbord'))
+        return redirect(url_for('superadmin_dashboard1'))
     
     # If GET request, fetch the current stock data
     cur.execute("SELECT * FROM stock WHERE id = %s", (id,))
@@ -123,98 +86,59 @@ def update_stock(id):
     cur.close()
     return render_template('update_stock.html', stock=stock)
 
+# Add Stock Route
+@app.route('/add', methods=['GET', 'POST'])
+def add_stock():
+    if request.method == 'POST':
+        item_name = request.form['item-name']
+        quantity = request.form['quantity']
+        price = request.form['price']
+        reorder_level = request.form['reorder-level']
+        
+        cur = mysql.connection.cursor()  # Interact with DB
+        cur.execute("INSERT INTO stock (item_name, quantity, price, reorder_level) VALUES (%s, %s, %s, %s)", 
+                   (item_name, quantity, price, reorder_level))
+        mysql.connection.commit()  # Save
+        cur.close()  # Close the cursor
+        return redirect(url_for('superadmin_dashboard1'))
+    
+    return redirect(url_for('superadmin_dashboard1'))
+
+# Delete Stock Route
 @app.route('/delete/<int:id>', methods=['GET'])
 def delete_stock(id):
     cur = mysql.connection.cursor()
     cur.execute("DELETE FROM stock WHERE id = %s", (id,))
     mysql.connection.commit()
-    return redirect(url_for('admin_dashbord'))
-#<-------------------------------Main Page Configuration Part----------------------------------->#
-#about mainpage
+    cur.close()  # Close the cursor
+    return redirect(url_for('superadmin_dashboard1'))
 
-#main page appoiment
-@app.route('/about')
-def about_main():
+# Role-specific Dashboard Routes
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('admin_dashboard1.html')
 
-    return render_template(('main_pages/about.html'))
+@app.route('/user')
+def user_dashboard():
+    return render_template('user_dashboard.html')
 
-#main page docter page
-@app.route('/doctor')
-def doctor_main():
+@app.route('/cashier')
+def cashier_dashboard():
+    return render_template('user_dashboard.html')
 
-    return render_template('main_pages/doctors.html')
+@app.route('/logout')
+def logout():
+    session.clear()  # Clear all session data
+    flash('You have been logged out.')  # Optional: Add a flash message
+    return redirect(url_for('home'))  # Redirect to the homepage or login
 
-#main apge gallery
-@app.route('/gallery')
-def gallery_main():
+# Admin Dashboard Route
+@app.route('/admin_dashboard_superadmin')
+def super_admin_dashboard():
+    return render_template('admin_dashboard.html')
 
-    return render_template('main_pages/gallery.html')
-
-#main page contact
-@app.route('/contact')
-def contact_main():
-
-    return render_template('main_pages/contact.html')
-
-#main pager registration
-@app.route('/registration')
-def register_main():
-
-    return render_template('main_pages/registration.html')
+#----------------User operation------------------#
 
 
-
-
-#registration
-@app.route('/registerDB', methods=['GET', 'POST'])
-def register_DB():
-    if request.method == 'POST':
-
-            first_name = request.form['first-name']
-            last_name = request.form['last-name']
-            email=request.form['email']
-            password=request.form['password']    
-            cur=mysql.connection.cursor() #interact with DB
-            cur.execute("INSERT INTO registration (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)", (first_name,  last_name, email,password ))
-            mysql.connection.commit() # save
-            cur.close()  # Close the cursor
-            return redirect(url_for('register_main'))
-    return redirect(url_for('register_main'))
-
-#main home routing path
-@app.route('/login')
-def login_main():
-
-    return render_template(('main_pages/login.html'))
-
-#main page appoiment
-@app.route('/booking')
-def appoiment_main():
-
-    return render_template(('main_pages/appointment.html'))
-
-#main page appoiment
-@app.route('/bookingDB' , methods=['GET', 'POST'])
-def appoiment_DB():
-    if request.method == 'POST':
-           
-        name=request.form['name']
-        email=request.form['email']
-        purpose=request.form['subject']
-        tel_No=request.form['number']
-        department = request.form['department']
-        date=request.form['date']
-        time=request.form['Time']
-        cur=mysql.connection.cursor() #interact with DB
-        cur.execute("INSERT INTO booking(name, email, purpose, mobile_number, department,appointment_date, appointment_time) VALUES (%s, %s, %s, %s, %s, %s, %s)", ( name, email, purpose, tel_No , department , date , time ))
-        mysql.connection.commit() # save
-        cur.close() 
-        return redirect(url_for('login_main'))
-    return redirect(url_for('register_main'))
-
-
-
-if __name__ == "__main__":
-    app.run(debug=True)  
-
-
+if __name__ == '__main__':
+    app.run(debug=True)
