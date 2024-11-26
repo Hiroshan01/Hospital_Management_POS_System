@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
+from models import user_data #model file in user_data.py
 
 app = Flask(__name__)
 
@@ -9,7 +10,7 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'hospital_management_system'
 
-mysql = MySQL(app)
+mysql = user_data.mysql = MySQL(app)
 
 # Set a secret key (replace with a long, random, unique string)
 app.config['SECRET_KEY'] = 'Hiroshan1999'
@@ -47,6 +48,21 @@ def login():
     else:
         flash('Invalid username or password')
         return redirect(url_for('home'))
+    
+    # Role-specific Dashboard Routes
+@app.route('/admin')
+def admin_dashboard():
+    users = user_data.get_users()
+    return render_template('admin_dsahbord1.html',users=users)
+
+@app.route('/user')
+def user_dashboard():
+     users = user_data.get_users()
+     return render_template('user_dashbord.html', users=users)
+
+@app.route('/cashier')
+def cashier_dashboard():
+    return render_template('user_dashboard.html')
 
 # SuperAdmin Dashboard Route
 @app.route('/superadmin_db_details')
@@ -56,8 +72,10 @@ def superadmin_dashboard1():
     cursor.execute("SELECT * FROM stock")  
     stock = cursor.fetchall()
     print(stock)  # Debugging output
+    
+    users = user_data.get_users()
 
-    return render_template('superadmin_dashboard.html', stock=stock)
+    return render_template('superadmin_dashboard.html', stock=stock, users=users)
 
 # Stock Update Route
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -104,6 +122,8 @@ def add_stock():
     
     return redirect(url_for('superadmin_dashboard1'))
 
+
+
 # Delete Stock Route
 @app.route('/delete/<int:id>', methods=['GET'])
 def delete_stock(id):
@@ -113,18 +133,7 @@ def delete_stock(id):
     cur.close()  # Close the cursor
     return redirect(url_for('superadmin_dashboard1'))
 
-# Role-specific Dashboard Routes
-@app.route('/admin')
-def admin_dashboard():
-    return render_template('admin_dashboard1.html')
 
-@app.route('/user')
-def user_dashboard():
-    return render_template('user_dashboard.html')
-
-@app.route('/cashier')
-def cashier_dashboard():
-    return render_template('user_dashboard.html')
 
 @app.route('/logout')
 def logout():
@@ -138,6 +147,45 @@ def super_admin_dashboard():
     return render_template('admin_dashboard.html')
 
 #----------------User operation------------------#
+# Initialize MySQL and pass to user_data
+from flask import render_template, request, jsonify
+
+@app.route('/add_users')
+def add_user():
+    
+    return render_template('user/add_user.html')
+
+
+# Route to handle adding user
+@app.route('/add_user_to_', methods=['GET', 'POST'])
+def add_user_route():
+    if request.method=='POST':
+       user_name = request.form['user_name']
+       address = request.form['address']
+       phone_no = request.form['phone_no']
+       comment = request.formt('comment', '') 
+       
+       cur= cur = mysql.connection.cursor()
+       cur.execute("""
+            INSERT INTO users_data (user_name, address, phone_no, comment) 
+              VALUES (%s, %s, %s, %s)
+    """, (user_name, address, phone_no, comment))
+       mysql.connection.commit()
+       cur.close()  
+         # Redirect back to the add users page after successful submission
+       return redirect(url_for('add_user'))
+
+    # Return to the form on GET request (if no data is posted)
+    return render_template('user/add_user.html')
+   
+    
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

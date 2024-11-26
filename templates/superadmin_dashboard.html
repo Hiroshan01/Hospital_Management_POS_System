@@ -216,19 +216,54 @@
                         <label for="reorder-level">Reorder Level</label>
                         <input type="number" class="form-control" id="reorder-level" name="reorder-level" required>
                     </div>
-                    <button type="submit" class="btn btn btn-primary btn-sm">Add Stock</button>
+                    <button type="submit" class="btn btn-custom btn-block">Add Stock</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-    
+<div class="main-content">
+    <div class="container-fluid">
+        <h2>Users Data</h2>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                <tr>
+                    <th>User Name</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                    <th>Comment</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user[1] }}</td> <!-- user_name -->
+                    <td>{{ user[2] }}</td> <!-- address -->
+                    <td>{{ user[3] }}</td> <!-- phone_no -->
+                    <td>{{ user[4] }}</td> <!-- comment -->
+                    <td>
+                        <a href="#" class="btn btn-primary btn-sm">Update</a>
+                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                                
+                    </tbody>
+                </table>
+                <a href="{{ url_for('add_user') }}" class="btn btn-primary">
+                    Add Users
+                </a>
                 
+            </div>
+        </div>
                 
             </div>
         </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
