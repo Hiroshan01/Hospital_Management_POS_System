@@ -11,36 +11,34 @@
         <h2 class="mb-4">Item Data</h2>
         
         <!-- Form for adding user data -->
-        <form id="userForm" method="POST" action="">
+        <form id="userForm" method="POST" action="{{ url_for('add_items') }}">
             <div class="form-row">
-                <div class="form-group col-md-3">
-                    <label for="user_name">Item ID</label>
-                    <input type="text" class="form-control" id="user_name" name="item_ID" required>
+                <div class="form-group col-md-3"> 
+                    <label for="item_name">Item Name</label>
+                    <input type="text" class="form-control" id="item_name" name="item_name" required>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="address">Item Name</label>
-                    <input type="text" class="form-control" id="address" name="item_name" required>
+                    <label for="company_name">Company Name</label>
+                    <input type="tel" class="form-control" id="company_name" name="company_name" required>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="phone_no">Company Name</label>
-                    <input type="tel" class="form-control" id="phone_no" name="company_name" required>
+                    <label for="company_name">Dose</label>
+                    <input type="tel" class="form-control" id="company_name" name="dose" required>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="comment">Genetic Name</label>
-                    <input type="text" class="form-control" id="comment" name="genetic_name">
+                    <label for="genetic_name">Genetic Name</label>
+                    <input type="text" class="form-control" id="genetic_name" name="genetic_name">
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="comment">Brand Name</label>
-                    <input type="text" class="form-control" id="comment" name="brand_name">
+                    <label for="brand_name">Brand Name</label>
+                    <input type="text" class="form-control" id="brand_name" name="brand_name">
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="comment">specific1</label>
-                    <input type="text" class="form-control" id="comment" name="specific1">
+                    <label for="specific1">Specific1</label>
+                    <input type="text" class="form-control" id="specific1" name="specific1">
                 </div>
-                <div class="form-group col-md-3">
-                    <label for="comment">specific2</label>
-                    <input type="text" class="form-control" id="comment" name="specific1">
-                </div>
+                
+                
             </div>
             <button type="submit" class="btn btn-primary">Add User</button>
             {% if session.role == 'SuperAdmin' %}

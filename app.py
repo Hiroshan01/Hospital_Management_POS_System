@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_mysqldb import MySQL
 from models import user_data #model file in user_data.py
+from typing import Any
+from models import items
+from models.items import get_items
+
+
 
 app = Flask(__name__)
 
@@ -11,6 +16,10 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'hospital_management_system'
 
 mysql = user_data.mysql = MySQL(app)
+
+items.mysql = mysql
+
+
 
 
 app.config['SECRET_KEY'] = 'Hiroshan1999'
@@ -64,7 +73,7 @@ def user_dashboard():
 
 @app.route('/cashier')
 def cashier_dashboard():
-    return render_template('user_dashboard.html')
+    return render_template('cahier_dashbord.html')
 
 # SuperAdmin Dashboard Route
 @app.route('/superadmin_db_details')
@@ -76,8 +85,9 @@ def superadmin_dashboard1():
     print(stock)  
     
     users = user_data.get_users()
+    items = get_items() 
 
-    return render_template('superadmin_dashboard.html', stock=stock, users=users)
+    return render_template('superadmin_dashboard.html', stock=stock, users=users,items=items)
 
 # Stock Update Route
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -230,6 +240,38 @@ def delete_user_DB(id):
 #----------------------------------------------------------------------------------------------------------------------------------------------#
 
 #------------------------Items Manages--------------------------#
+
+@app.route('/items_re')
+def item():
+    
+    return render_template('item/add_item.html')
+ #--------------------ADD Item----------------------------------#
+ 
+ # Stock Update Route
+@app.route('/update_Items', methods=['GET', 'POST'])
+def add_items():
+    cur = mysql.connection.cursor()
+    
+    if request.method == 'POST':
+        item_name= request.form['item_name']
+        company_name = request.form['company_name']
+        dose=request.form['dose']
+        genetic_name = request.form['genetic_name']
+        brand_name = request.form['brand_name']
+        specific1= request.form['specific1']
+        
+       
+        cur = mysql.connection.cursor()  # Interact with DB
+        cur.execute("INSERT INTO items (item_name, company, dose, genetic_name,brand_name,specific1) VALUES (%s, %s, %s, %s,%s,%s)", 
+                   (item_name,  company_name,  dose,genetic_name, brand_name,specific1))
+        mysql.connection.commit()  # Save
+        cur.close()  # Close the cursor
+        return redirect(url_for('superadmin_dashboard1'))
+    
+    return redirect(url_for('superadmin_dashboard1'))
+
+
+
 
 
 
