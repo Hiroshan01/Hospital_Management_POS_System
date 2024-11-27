@@ -210,3 +210,6 @@ def appoiment_DB():
 def user_role_login():
     
     return render_template('login_RBAC.html')
+
+<a href="{{ url_for('delete_user', id=user[0]) }}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>

@@ -11,7 +11,7 @@
         <h2 class="mb-4">User Data</h2>
         
         <!-- Form for adding user data -->
-        <form id="userForm" method="POST" action="/add_user">
+        <form id="userForm" method="POST" action="{{ url_for('add_user_route') }}">
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="user_name">User Name</label>
@@ -31,6 +31,19 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Add User</button>
+            {% if session.role == 'SuperAdmin' %}
+            <a href="{{ url_for('superadmin_dashboard1') }}" class="btn btn-secondary">Move Dashboard</a>
+            {% elif session.role == 'Admin' %}
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Move Dashboard</a>
+            {% elif session.role == 'User' %}
+            <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">Move Dashboard</a>
+            {% elif session.role == 'cashier' %}
+            <a href="{{ url_for('cashier_dashboard') }}" class="btn btn-secondary">Move Dashboard</a>
+            
+            {% else %}
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+            {% endif %}
+
         </form>
 
        

@@ -12,7 +12,7 @@ app.config['MYSQL_DB'] = 'hospital_management_system'
 
 mysql = user_data.mysql = MySQL(app)
 
-# Set a secret key (replace with a long, random, unique string)
+
 app.config['SECRET_KEY'] = 'Hiroshan1999'
 
 # Main Page Route
@@ -20,23 +20,25 @@ app.config['SECRET_KEY'] = 'Hiroshan1999'
 def home():
     return render_template('base.html')
 
+#---------------User role credintial--------------------#
+
 @app.route('/login', methods=['POST'])
 def login():
     username = request.form['username']
     password = request.form['password']
     
-    # Create a cursor and execute the query
+   
     cursor = mysql.connection.cursor()
     query = "SELECT role FROM users WHERE username=%s AND password=%s"
     cursor.execute(query, (username, password))
-    user = cursor.fetchone()  # Fetch the first matching record
+    user = cursor.fetchone()  
     
     if user:
         role = user[0]  # Access the role from the returned tuple
         session['username'] = username
         session['role'] = role
 
-        # Role-based redirection
+        
         if role == 'SuperAdmin':
             return redirect(url_for('superadmin_dashboard1'))
         elif role == 'Admin':
@@ -49,7 +51,7 @@ def login():
         flash('Invalid username or password')
         return redirect(url_for('home'))
     
-    # Role-specific Dashboard Routes
+#-------------Role route------------------
 @app.route('/admin')
 def admin_dashboard():
     users = user_data.get_users()
@@ -67,11 +69,11 @@ def cashier_dashboard():
 # SuperAdmin Dashboard Route
 @app.route('/superadmin_db_details')
 def superadmin_dashboard1():
-    # Fetch stock data
+    
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM stock")  
     stock = cursor.fetchall()
-    print(stock)  # Debugging output
+    print(stock)  
     
     users = user_data.get_users()
 
@@ -88,14 +90,14 @@ def update_stock(id):
         price = request.form['price']
         reorder_level = request.form['reorder-level']
         
-        # Update stock in the database
+       
         cur.execute("""
             UPDATE stock 
             SET item_name = %s, quantity = %s, price = %s, reorder_level = %s 
             WHERE id = %s""", (item_name, quantity, price, reorder_level, id))
         
-        mysql.connection.commit()  # Save changes
-        cur.close()  # Close the cursor
+        mysql.connection.commit() 
+        cur.close()  
         return redirect(url_for('superadmin_dashboard1'))
     
     # If GET request, fetch the current stock data
@@ -151,7 +153,7 @@ def super_admin_dashboard():
 from flask import render_template, request, jsonify
 
 @app.route('/add_users')
-def add_user():
+def add_user_form():
     
     return render_template('user/add_user.html')
 
@@ -163,7 +165,7 @@ def add_user_route():
        user_name = request.form['user_name']
        address = request.form['address']
        phone_no = request.form['phone_no']
-       comment = request.formt('comment', '') 
+       comment = request.form.get('comment', '')
        
        cur= cur = mysql.connection.cursor()
        cur.execute("""
@@ -172,13 +174,64 @@ def add_user_route():
     """, (user_name, address, phone_no, comment))
        mysql.connection.commit()
        cur.close()  
-         # Redirect back to the add users page after successful submission
-       return redirect(url_for('add_user'))
+     
+       return redirect(url_for('add_user_form'))
 
-    # Return to the form on GET request (if no data is posted)
+  
     return render_template('user/add_user.html')
-   
-    
+
+#--------------------Update users-------------------#
+
+@app.route('/update_users/<int:id>', methods=['GET', 'POST'])
+def update_user(id):
+    cur = mysql.connection.cursor()
+
+    if request.method == 'POST':
+        # Fetch form data
+        user_name = request.form['user_name']
+        address = request.form['address']
+        phone_no = request.form['phone_no']
+        comment = request.form.get('comment', '')
+
+        # Update user details in the database
+        try:
+            cur.execute("""
+                UPDATE users_data 
+                SET user_name = %s, address = %s, phone_no = %s, comment = %s 
+                WHERE user_id = %s
+            """, (user_name, address, phone_no, comment, id))
+            mysql.connection.commit()
+            return redirect(url_for('view_users'))  # Redirect after updating
+        except Exception as e:
+            print("Error updating user:", e)
+            mysql.connection.rollback()  # Rollback if there's an error
+
+    # Fetch user details for the GET request
+    cur.execute("SELECT * FROM users_data WHERE user_id = %s", (id,))
+    user = cur.fetchone()
+    cur.close()
+
+    return render_template('user/update_user.html', user=user)
+
+#------------------------Delete Users-----------------------#
+@app.route('/delete_User_data/<int:id>', methods=['GET'])
+def delete_user_DB(id):
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM users_data WHERE user_id = %s", (id,))  
+        mysql.connection.commit()
+        return redirect(url_for('superadmin_dashboard1'))
+    except Exception as e:
+        print("Error deleting user:", e)
+        mysql.connection.rollback() 
+        return redirect(url_for('superadmin_dashboard1'))  
+#------------------------Delete Users End-----------------------#
+
+#------------------------Items Manages--------------------------#
+
+
+
+
 
 
 

@@ -100,6 +100,8 @@
                         <th>Address</th>
                         <th>Phone Number</th>
                         <th>Comment</th>
+                        <th>Action</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -109,10 +111,20 @@
                         <td>{{ user[2] }}</td> <!-- address -->
                         <td>{{ user[3] }}</td> <!-- phone_no -->
                         <td>{{ user[4] }}</td> <!-- comment -->
+                        <td>
+                            <a href="{{ url_for('update_user', id=user[0]) }}" class="btn btn-primary btn-sm">Edit Users</a>
+                        </td>
                     </tr>
+                    
                     {% endfor %}
                 </tbody>
+                
+               
             </table>
+            <a href="{{ url_for('add_user_form') }}" class="btn btn-primary btn-sm">Add User</a>
+           
+
+           
             
         </div>
 

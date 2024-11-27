@@ -2,7 +2,7 @@ from flask_mysqldb import MySQL
 
 mysql=None
 #sele
-
+'''''
 #insert user
 # add_user.py
 def add_user(data):
@@ -21,6 +21,7 @@ def add_user(data):
     cur.close()
     
     return 
+'''
 
 
 #Function to retrive a
