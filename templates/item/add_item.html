@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>User Data Table</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Item Data</h2>
+        
+        <!-- Form for adding user data -->
+        <form id="userForm" method="POST" action="">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="user_name">Item ID</label>
+                    <input type="text" class="form-control" id="user_name" name="item_ID" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="address">Item Name</label>
+                    <input type="text" class="form-control" id="address" name="item_name" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="phone_no">Company Name</label>
+                    <input type="tel" class="form-control" id="phone_no" name="company_name" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="comment">Genetic Name</label>
+                    <input type="text" class="form-control" id="comment" name="genetic_name">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="comment">Brand Name</label>
+                    <input type="text" class="form-control" id="comment" name="brand_name">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="comment">specific1</label>
+                    <input type="text" class="form-control" id="comment" name="specific1">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="comment">specific2</label>
+                    <input type="text" class="form-control" id="comment" name="specific1">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add User</button>
+            {% if session.role == 'SuperAdmin' %}
+            <a href="{{ url_for('superadmin_dashboard1') }}" class="btn btn-secondary">Move Dashboard</a>
+            {% elif session.role == 'Admin' %}
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Move Dashboard</a>
+            {% elif session.role == 'User' %}
+            <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">Move Dashboard</a>
+            {% elif session.role == 'cashier' %}
+            <a href="{{ url_for('cashier_dashboard') }}" class="btn btn-secondary">Move Dashboard</a>
+            
+            {% else %}
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+            {% endif %}
+
+        </form>
+
+       
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
