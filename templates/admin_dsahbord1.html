@@ -156,11 +156,9 @@
                             <td>{{ item[5] }}</td>
                             <td>{{ item[6] }}</td>
                             <td>
-                                <a href="{{ url_for('update_items', id=item[0])}}" class="btn btn-primary btn-sm">Update</a>
-
-                                
-                                <a href="{{ url_for('delete_item_DB',id=item[0])}}" class="btn btn-danger btn-sm">Delete</a>
-                               
+                                <td>
+                                    <a href="{{ url_for('update_items', id=item[0]) }}" class="btn btn-primary btn-sm">Edit Item</a>
+                                </td>
                             </td>
                             
                         </tr>

@@ -47,7 +47,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h3>SuperAdmin</h3>
-        <a href="{{ url_for('super_admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('superadmin_dashboard1') }}">Dashboard</a>
         <a href="#"><i class="fas fa-user-injured"></i> Patients</a>
         <a href="#"><i class="fas fa-user-md"></i> Doctors</a>
         <a href="#"><i class="fas fa-calendar-alt"></i> Appointments</a>
@@ -304,7 +304,7 @@
                                     <a href="{{ url_for('update_items', id=item[0])}}" class="btn btn-primary btn-sm">Update</a>
 
                                     
-                                    <a href="{{ url_for('delete_item_DB',id=item[0])}}" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="{{ url_for('delete_item_DB',id=item[0])}}" class="btn btn-danger btn-sm d-inline">Delete</a>
                                    
                                 </td>
                                 

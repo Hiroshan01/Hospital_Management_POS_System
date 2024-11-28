@@ -268,9 +268,9 @@ def add_items():
                    (item_name,  company_name,  dose,genetic_name, brand_name,specific1))
         mysql.connection.commit()  # Save
         cur.close()  # Close the cursor
-        return redirect(url_for('superadmin_dashboard1'))
+        return redirect(url_for('item'))
     
-    return redirect(url_for('superadmin_dashboard1'))
+    return redirect(url_for('item'))
 
 #-------------Update Uesr------------------#
 
@@ -317,28 +317,6 @@ def delete_item_DB(id):
         print("Error deleting user:", e)
         mysql.connection.rollback() 
         return redirect(url_for('superadmin_dashboard1')) 
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
