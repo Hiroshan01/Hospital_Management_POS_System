@@ -225,6 +225,7 @@
         </div>
     </div>
 </div>
+<!-- Modal for Add users -->
 <div class="main-content">
     <div class="container-fluid">
         <h2>Manage Users</h2>
@@ -268,6 +269,7 @@
             </div>
         </div>
     </div>
+    <!-- Modal for Add Items -->
     <div class="main-content">
         <div class="container-fluid">
             <h2>Manage Users</h2>
@@ -283,6 +285,7 @@
                                 <th>Genetic Name</th>
                                 <th>Brand Name</th>
                                 <th>Specific 1</th>
+                                <th>Action</th>
                                
                                
                             </tr>
@@ -297,13 +300,20 @@
                                 <td>{{ item[4] }}</td>
                                 <td>{{ item[5] }}</td>
                                 <td>{{ item[6] }}</td>
+                                <td>
+                                    <a href="{{ url_for('update_items', id=item[0])}}" class="btn btn-primary btn-sm">Update</a>
+
+                                    
+                                    <a href="{{ url_for('delete_item_DB',id=item[0])}}" class="btn btn-danger btn-sm">Delete</a>
+                                   
+                                </td>
                                 
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                     <a href="{{ url_for('item') }}" class="btn btn-primary">
-                        Add Users
+                        Add Item
                     </a>
 
                        

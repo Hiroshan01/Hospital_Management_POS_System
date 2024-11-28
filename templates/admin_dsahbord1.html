@@ -121,12 +121,63 @@
                 
                
             </table>
-            <a href="{{ url_for('add_user_form') }}" class="btn btn-primary btn-sm">Add User</a>
-           
-
-           
-            
+            <a href="{{ url_for('add_user_form') }}" class="btn btn-primary btn-sm">Add User</a>         
         </div>
+
+          <!-- Modal for Add Items -->
+  <div class="main-content">
+    <div class="container-fluid">
+        <h2>Manage Items</h2>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Item Name</th>
+                            <th>Company</th>
+                            <th>Dose</th>
+                            <th>Genetic Name</th>
+                            <th>Brand Name</th>
+                            <th>Specific 1</th>
+                            <th>Action</th>
+                           
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item[0] }}</td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ item[2] }}</td>
+                            <td>{{ item[3] }}</td>
+                            <td>{{ item[4] }}</td>
+                            <td>{{ item[5] }}</td>
+                            <td>{{ item[6] }}</td>
+                            <td>
+                                <a href="{{ url_for('update_items', id=item[0])}}" class="btn btn-primary btn-sm">Update</a>
+
+                                
+                                <a href="{{ url_for('delete_item_DB',id=item[0])}}" class="btn btn-danger btn-sm">Delete</a>
+                               
+                            </td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{{ url_for('item') }}" class="btn btn-primary">
+                    Add Item
+                </a>
+
+                   
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

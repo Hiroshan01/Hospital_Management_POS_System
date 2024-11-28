@@ -7,6 +7,7 @@ from models.items import get_items
 
 
 
+
 app = Flask(__name__)
 
 # MySQL Configuration
@@ -64,7 +65,8 @@ def login():
 @app.route('/admin')
 def admin_dashboard():
     users = user_data.get_users()
-    return render_template('admin_dsahbord1.html',users=users)
+    items = get_items() 
+    return render_template('admin_dsahbord1.html',users=users,items =items )
 
 @app.route('/user')
 def user_dashboard():
@@ -248,7 +250,7 @@ def item():
  #--------------------ADD Item----------------------------------#
  
  # Stock Update Route
-@app.route('/update_Items', methods=['GET', 'POST'])
+@app.route('/Add_Items', methods=['GET', 'POST'])
 def add_items():
     cur = mysql.connection.cursor()
     
@@ -269,6 +271,59 @@ def add_items():
         return redirect(url_for('superadmin_dashboard1'))
     
     return redirect(url_for('superadmin_dashboard1'))
+
+#-------------Update Uesr------------------#
+
+
+@app.route('/update_item_ii/<int:id>', methods=['GET', 'POST'])
+def update_items(id):
+    cur = mysql.connection.cursor()
+
+    if request.method == 'POST':
+        item_name = request.form['item_name']
+        company_name = request.form['company_name']
+        dose = request.form['dose']
+        genetic_name = request.form['genetic_name']
+        brand_name = request.form['brand_name']
+        specific1 = request.form['specific1']
+
+     
+        try:
+            cur.execute("""
+                UPDATE items 
+                SET item_name = %s, company = %s, dose = %s, genetic_name = %s, brand_name = %s, specific1 = %s 
+                WHERE id = %s
+            """, (item_name, company_name, dose, genetic_name, brand_name, specific1, id))
+            mysql.connection.commit()
+            return redirect(url_for('update_item_route')) 
+        except Exception as e:
+            print("Error updating item:", e)  
+            mysql.connection.rollback()  
+            
+    cur.execute("SELECT * FROM items WHERE id = %s", (id,))
+    items = cur.fetchone()
+    cur.close()
+
+    return render_template('item/updated_item.html', items=items)
+#---------------------Delete Items----------------------------------#
+@app.route('/delete_item_data/<int:id>', methods=['GET'])
+def delete_item_DB(id):
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE  FROM items WHERE id = %s", (id,))  
+        mysql.connection.commit()
+        return redirect(url_for('superadmin_dashboard1'))
+    except Exception as e:
+        print("Error deleting user:", e)
+        mysql.connection.rollback() 
+        return redirect(url_for('superadmin_dashboard1')) 
+
+
+   
+
+
+
+
 
 
 

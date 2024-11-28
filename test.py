@@ -213,3 +213,41 @@ def user_role_login():
 
 <a href="{{ url_for('delete_user', id=user[0]) }}" class="btn btn-danger btn-sm">Delete</a>
                             </td>
+
+
+
+
+
+
+
+@app.route('/update_item/<int:id>', methods=['GET', 'POST'])
+def update_items(id):
+    cur = mysql.connection.cursor()
+
+    if request.method == 'POST':
+        item_name= request.form['item_name']
+        company_name = request.form['company_name']
+        dose=request.form['dose']
+        genetic_name = request.form['genetic_name']
+        brand_name = request.form['brand_name']
+        specific1= request.form['specific1']
+
+        # Update user details in the database
+        try:
+            cur.execute("""
+                UPDATE items 
+                SET item_name = %s, company_name = %s, dose = %s, genetic_name = %s , brand_name= %s ,specific1 = %s 
+                WHERE id = %s
+            """, (item_name, company_name, dose, genetic_name,brand_name ,specific1,id))
+            mysql.connection.commit()
+            return redirect(url_for('view_users'))  # Redirect after updating
+        except Exception as e:
+            print("Error updating user:", e)
+            mysql.connection.rollback()  # Rollback if there's an error
+
+    # Fetch user details for the GET request
+    cur.execute("SELECT * FROM items  WHERE id = %s", (id,))
+    user = cur.fetchone()
+    cur.close()
+
+    return render_template('user/update_items.html', user=user)

@@ -1,3 +1,6 @@
+
+
+
 from flask_mysqldb import MySQL
 
 mysql=None
@@ -8,3 +11,6 @@ def get_items():
     rows = cur.fetchall()
     cur.close()
     return rows
+# item.py
+
+
