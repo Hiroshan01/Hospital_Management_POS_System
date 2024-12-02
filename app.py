@@ -30,6 +30,12 @@ app.config['SECRET_KEY'] = 'Hiroshan1999'
 def home():
     return render_template('base.html')
 
+    
+@app.route('/register_user_role')
+def registration():
+
+    return render_template('registration.html')
+
 #---------------User role credintial--------------------#
 
 @app.route('/login', methods=['POST'])
@@ -317,6 +323,9 @@ def delete_item_DB(id):
         print("Error deleting user:", e)
         mysql.connection.rollback() 
         return redirect(url_for('superadmin_dashboard1')) 
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
