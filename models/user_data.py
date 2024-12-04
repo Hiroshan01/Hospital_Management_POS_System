@@ -1,36 +1,17 @@
 from flask_mysqldb import MySQL
 
 mysql=None
-#sele
-'''''
-#insert user
-# add_user.py
-def add_user(data):
-    user_name = data['user_name']
-    address = data['address']
-    phone_no = data['phone_no']
-    comment = data.get('comment', '') 
 
-    # Insert into database
-    cur = mysql.connection.cursor()
-    cur.execute("""
-        INSERT INTO users_data (user_name, address, phone_no, comment) 
-        VALUES (%s, %s, %s, %s)
-    """, (user_name, address, phone_no, comment))
-    mysql.connection.commit()
-    cur.close()
-    
-    return 
-'''
+from flask_mysqldb import MySQL
 
+class UserData:
+    def __init__(self, mysql: MySQL):
+        self.mysql = mysql
 
-#Function to retrive a
-def get_users():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM users_data")
-    rows = cur.fetchall()
-    cur.close()
-    return rows
+    def get_users(self):
+        cursor = self.mysql.connection.cursor()
+        cursor.execute("SELECT * FROM users_data")
+        return cursor.fetchall()
  
 # Function to update user
 def update_user(user_id, data):

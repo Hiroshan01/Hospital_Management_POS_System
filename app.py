@@ -9,20 +9,12 @@ from models.items import get_items
 
 
 app = Flask(__name__)
+app.config.from_object('config.Config')  #load database file
 
-# MySQL Configuration
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'hospital_management_system'
 
 mysql = user_data.mysql = MySQL(app)
 
 items.mysql = mysql
-
-
-
-
 app.config['SECRET_KEY'] = 'Hiroshan1999'
 
 # Main Page Route
