@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Update Item</h1>
-        <form action="{{ url_for('update_items', id=items[0]) }}" method="POST">
+        <form action="{{ url_for('update_items', uuid=items[0]) }}" method="POST">
             <div class="form-group">
                 <label for="item_name">Item Name:</label>
                 <input type="text" class="form-control" id="item_name" name="item_name" value="{{ items[1] }}" required>

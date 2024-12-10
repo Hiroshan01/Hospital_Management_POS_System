@@ -250,6 +250,7 @@
                     <td>{{ user[4] }}</td> <!-- comment -->
                     <td>
                         <a href="{{ url_for('update_user', id=user[0]) }}" class="btn btn-primary btn-sm">Update</a>
+
                         <a href="{{ url_for('delete_user_DB', id=user[0]) }}" class="btn btn-danger btn-sm">Delete</a>
 
 
@@ -272,7 +273,7 @@
     <!-- Modal for Add Items -->
     <div class="main-content">
         <div class="container-fluid">
-            <h2>Manage Users</h2>
+            <h2>Manage Items</h2>
             <div class="card">
                 <div class="card-body">
                     <table class="table table-bordered">
@@ -301,10 +302,10 @@
                                 <td>{{ item[5] }}</td>
                                 <td>{{ item[6] }}</td>
                                 <td>
-                                    <a href="{{ url_for('update_items', id=item[0])}}" class="btn btn-primary btn-sm">Update</a>
+                                    <a href="{{ url_for('update_items', uuid=item[0])}}" class="btn btn-primary btn-sm">Update</a>
 
                                     
-                                    <a href="{{ url_for('delete_item_DB',id=item[0])}}" class="btn btn-danger btn-sm d-inline">Delete</a>
+                                    <a href="{{ url_for('delete_item_DB',uuid=item[0])}}" class="btn btn-danger btn-sm d-inline">Delete</a>
                                    
                                 </td>
                                 
