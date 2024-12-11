@@ -153,33 +153,89 @@
             <h2>Manage Stock</h2>
             <div class="card">
                 <div class="card-body">
-                    <h4>Stock List</h4>
+                    <h4>Current Stock</h4>
                     
                     <table class="table table-bordered">
                         <thead>
-                            <tr>
-                                <th>Item ID</th>
-                                <th>Item Name</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Reorder Level</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in stock %}
-                            <tr>
-                                <td>{{ item[0] }}</td>
-                                <td>{{ item[1] }}</td>
-                                <td>{{ item[2] }}</td>
-                                <td>{{ item[3] }}</td>
-                                <td>{{ item[4] }}</td>
-                                <td>
-                                    <a href="{{ url_for('update_stock', id=item[0]) }}" class="btn btn-primary btn-sm">Update</a>
-                                    <a href="{{ url_for('delete_stock', id=item[0]) }}" class="btn btn-danger btn-sm">Delete</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                            <thead>
+                                <tr>
+                                    <th>Item UUID</th>
+                                    <th>Item Code</th>
+                                    <th>Invoice Number</th>
+                                    <th>Item Name</th>
+                                    <th>Time</th>
+                                    <th>Date</th>
+                                    <th>Cost</th>
+                                    <th> Selling Price</th>
+                                    <th>Quantity</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in stock %}
+                                <tr>
+                                    <td>{{ item[0] }}</td> <!-- item_uuid -->
+                                    <td>{{ item[1] }}</td> <!-- item_code -->
+                                    <td>{{ item[2] }}</td> <!-- invoice_number -->
+                                    <td>{{ item[3] }}</td> <!-- item -->
+                                    <td>{{ item[4] }}</td> <!-- time -->
+                                    <td>{{ item[5] }}</td> <!-- date -->
+                                    <td>{{ item[6] }}</td> <!-- cost -->
+                                    <td>{{ item[7] }}</td> <!-- price -->
+                                    <td>{{ item[8] }}</td> <!-- quantity -->
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            
+                        </tbody>
+                    </table>
+          
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- update stock-->
+    <div class="main-content">
+        <div class="container-fluid">
+            <h2>Update Stock</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h4>Update Stock</h4>
+                    
+                    <table class="table table-bordered">
+                        <thead>
+                            <thead>
+                                <tr>
+                                    <th>Item UUID</th>
+                                    <th>Item Code</th>
+                                    <th>Invoice Number</th>
+                                    <th>Item Name</th>
+                                    <th>Time</th>
+                                    <th>Date</th>
+                                    <th>Cost</th>
+                                    <th> Selling Price</th>
+                                    <th>Quantity</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in stock %}
+                                <tr>
+                                    <td>{{ item[0] }}</td> <!-- item_uuid -->
+                                    <td>{{ item[1] }}</td> <!-- item_code -->
+                                    <td>{{ item[2] }}</td> <!-- invoice_number -->
+                                    <td>{{ item[3] }}</td> <!-- item -->
+                                    <td>{{ item[4] }}</td> <!-- time -->
+                                    <td>{{ item[5] }}</td> <!-- date -->
+                                    <td>{{ item[6] }}</td> <!-- cost -->
+                                    <td>{{ item[7] }}</td> <!-- price -->
+                                    <td>{{ item[8] }}</td> <!-- quantity -->
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            
                         </tbody>
                     </table>
                    
@@ -204,20 +260,36 @@
             <div class="modal-body">
                 <form method="POST" action="{{ url_for('add_stock') }}">
                     <div class="form-group">
-                        <label for="item-name">Item Name</label>
-                        <input type="text" class="form-control" id="item-name" name="item-name" required>
+                        <label for="item-code">Item_code</label>
+                        <input type="text" class="form-control" id="item-name" name="code" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice_number">Invoice_Number</label>
+                        <input type="text" class="form-control" id="invoice_number" name="invoice_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="item_name">Item_Name</label>
+                        <input type="text" class="form-control" id="item_name" name="item_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time</label>
+                        <input type="text" class="form-control" id="time" name="time" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reorder-level">Date</label>
+                        <input type="text" class="form-control" id="reorder-level" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Cost</label>
+                        <input type="text" class="form-control" id="quantity" name="cost" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Selling Price</label>
+                        <input type="text" class="form-control" id="price" name="Selling_price" step="0.01" required>
                     </div>
                     <div class="form-group">
                         <label for="quantity">Quantity</label>
-                        <input type="number" class="form-control" id="quantity" name="quantity" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reorder-level">Reorder Level</label>
-                        <input type="number" class="form-control" id="reorder-level" name="reorder-level" required>
+                        <input type="text" class="form-control" id="quantity" name="quantity" required>
                     </div>
                     <button type="submit" class="btn btn-custom btn-block">Add Stock</button>
                 </form>

@@ -79,16 +79,17 @@ def cashier_dashboard():
 # SuperAdmin Dashboard Route
 @app.route('/superadmin_db_details')
 def superadmin_dashboard1():
-    
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM stock")  
+    cursor.execute("SELECT * FROM stock ORDER BY date, time")  # FIFO: Order by date and time
     stock = cursor.fetchall()
-    print(stock)  
+    cursor.close()
     
     users = user_data.get_users()
-    items = get_items() 
+    items = get_items()
 
-    return render_template('superadmin_dashboard.html', stock=stock, users=users,items=items)
+    return render_template('superadmin_dashboard.html', stock=stock, users=users, items=items)
+
+#-----------------------------------------STOCK--------------------------------------------------------------------
 
 # Stock Update Route
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -118,19 +119,25 @@ def update_stock(id):
     return render_template('update_stock.html', stock=stock)
 
 # Add Stock Route
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/add_stock', methods=['GET', 'POST'])
 def add_stock():
     if request.method == 'POST':
-        item_name = request.form['item-name']
+        item_code = request.form['code']
+        invoice_number = request.form['invoice_number']
+        item_name = request.form['item_name']
+        time = request.form['time']
+        date = request.form['date']
+        cost = request.form['cost']
+        price = request.form['Selling_price']
         quantity = request.form['quantity']
-        price = request.form['price']
-        reorder_level = request.form['reorder-level']
         
-        cur = mysql.connection.cursor()  # Interact with DB
-        cur.execute("INSERT INTO stock (item_name, quantity, price, reorder_level) VALUES (%s, %s, %s, %s)", 
-                   (item_name, quantity, price, reorder_level))
-        mysql.connection.commit()  # Save
-        cur.close()  # Close the cursor
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            INSERT INTO stock (item_uuid, item_code, invoice_number, item, time, date, cost, price, quantity) 
+            VALUES (UUID(), %s, %s, %s, %s, %s, %s, %s, %s)""", 
+            (item_code, invoice_number, item_name, time, date, cost, price, quantity))
+        mysql.connection.commit()
+        cur.close()
         return redirect(url_for('superadmin_dashboard1'))
     
     return redirect(url_for('superadmin_dashboard1'))
