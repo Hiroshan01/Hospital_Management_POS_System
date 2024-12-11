@@ -92,31 +92,6 @@ def superadmin_dashboard1():
 #-----------------------------------------STOCK--------------------------------------------------------------------
 
 # Stock Update Route
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
-def update_stock(id):
-    cur = mysql.connection.cursor()
-    
-    if request.method == 'POST':
-        item_name = request.form['item-name']
-        quantity = request.form['quantity']
-        price = request.form['price']
-        reorder_level = request.form['reorder-level']
-        
-       
-        cur.execute("""
-            UPDATE stock 
-            SET item_name = %s, quantity = %s, price = %s, reorder_level = %s 
-            WHERE id = %s""", (item_name, quantity, price, reorder_level, id))
-        
-        mysql.connection.commit() 
-        cur.close()  
-        return redirect(url_for('superadmin_dashboard1'))
-    
-    # If GET request, fetch the current stock data
-    cur.execute("SELECT * FROM stock WHERE id = %s", (id,))
-    stock = cur.fetchone()
-    cur.close()
-    return render_template('update_stock.html', stock=stock)
 
 # Add Stock Route
 @app.route('/add_stock', methods=['GET', 'POST'])
@@ -142,15 +117,39 @@ def add_stock():
     
     return redirect(url_for('superadmin_dashboard1'))
 
-
-
-# Delete Stock Route
-@app.route('/delete/<int:id>', methods=['GET'])
-def delete_stock(id):
+@app.route('/update_stock/<string:item_uuid>', methods=['GET', 'POST'])
+def update_stock(item_uuid):
     cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM stock WHERE id = %s", (id,))
+    
+    if request.method == 'POST':
+        item_name = request.form['item_name']
+        quantity = request.form['quantity']
+        price = request.form['Selling_price']
+        
+        # Update stock based on item_uuid
+        cur.execute("""
+            UPDATE stock 
+            SET item = %s, quantity = quantity + %s, price = %s 
+            WHERE item_uuid = %s""", (item_name, quantity, price, item_uuid))
+        
+        mysql.connection.commit() 
+        cur.close()  
+        return redirect(url_for('superadmin_dashboard1'))
+    
+    # If GET request, fetch the current stock data
+    cur.execute("SELECT * FROM stock WHERE item_uuid = %s", (item_uuid,))
+    stock = cur.fetchone()
+    cur.close()
+    return render_template('stock/update_stock.html', stock=stock)
+
+
+
+@app.route('/delete_stock/<string:item_uuid>', methods=['GET'])
+def delete_stock(item_uuid):
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM stock WHERE item_uuid = %s", (item_uuid,))
     mysql.connection.commit()
-    cur.close()  # Close the cursor
+    cur.close()
     return redirect(url_for('superadmin_dashboard1'))
 
 
