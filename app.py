@@ -120,9 +120,9 @@ def add_stock():
             (item_code, invoice_number, item_name, time, date, cost, price, quantity))
         mysql.connection.commit()
         cur.close()
-        return redirect(url_for('superadmin_dashboard1'))
+        return redirect(url_for('add_stock_form'))
     
-    return redirect(url_for('superadmin_dashboard1'))
+    return redirect(url_for('add_stock_form'))
 
 
 @app.route('/update_stock/<string:item_uuid>', methods=['GET', 'POST'])

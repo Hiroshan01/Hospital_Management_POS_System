@@ -53,9 +53,9 @@
         <!--<a href="#"><i class="fas fa-user-md"></i> Doctors</a>-->
         <!--<a href="#"><i class="fas fa-calendar-alt"></i> Appointments</a>-->
         <!--<a href="#"><i class="fas fa-pills"></i> Pharmacy</a>-->
-        <a href="#"><i class="fas fa-user-shield"></i> Admin</a>
-        <a href="#"><i class="fas fa-cash-register"></i> Cashier</a>
-        <a href="#"><i class="fas fa-users"></i> Users</a>
+        <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-user-shield"></i> Admin</a>
+        <a href="{{ url_for('cashier_dashboard') }}"><i class="fas fa-cash-register"></i> Cashier</a>
+        <a href="{{ url_for('user_dashboard') }}"><i class="fas fa-users"></i> Users</a>
 
         <a href="#"><i class="fas fa-flask"></i> Laboratory</a>
         <a href="#"><i class="fas fa-credit-card"></i> Billing</a>
