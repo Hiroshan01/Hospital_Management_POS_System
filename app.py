@@ -63,9 +63,12 @@ def login():
 #-------------Role route------------------
 @app.route('/admin')
 def admin_dashboard():
+    cursor = mysql.connection.cursor()
     users = user_data.get_users()
     items = get_items() 
-    return render_template('admin_dsahbord1.html',users=users,items =items )
+    cursor.execute("SELECT * FROM stock ORDER BY date, time")  # FIFO: Order by date and time
+    stock = cursor.fetchall()
+    return render_template('admin_dsahbord1.html',users=users,items =items, stock=stock )
 
 @app.route('/user')
 def user_dashboard():
@@ -92,6 +95,10 @@ def superadmin_dashboard1():
 #-----------------------------------------STOCK--------------------------------------------------------------------
 
 # Stock Update Route
+@app.route('/add_stock_form')
+def add_stock_form():
+
+    return render_template('stock/add_stock.html')
 
 # Add Stock Route
 @app.route('/add_stock', methods=['GET', 'POST'])
@@ -116,6 +123,7 @@ def add_stock():
         return redirect(url_for('superadmin_dashboard1'))
     
     return redirect(url_for('superadmin_dashboard1'))
+
 
 @app.route('/update_stock/<string:item_uuid>', methods=['GET', 'POST'])
 def update_stock(item_uuid):

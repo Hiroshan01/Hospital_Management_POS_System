@@ -91,7 +91,7 @@
                 </div>
             </div>
         </div>
-    
+        
             <h2 class="mt-5 mb-4">User List</h2>
             <table class="table table-striped table-bordered table-hover">
                 <thead class="thead-light">
@@ -175,7 +175,55 @@
         </div>
     </div>
 </div>
-
+<div class="main-content">
+    <div class="container-fluid">
+        <h2>Manage Stock</h2>
+        <div class="card">
+            <div class="card-body">
+                <h4>Current Stock</h4>
+                
+                <table class="table table-bordered">
+                    <thead>
+                        <thead>
+                            <tr>
+                                <th>Item UUID</th>
+                                <th>Item Code</th>
+                                <th>Invoice Number</th>
+                                <th>Item Name</th>
+                                <th>Time</th>
+                                <th>Date</th>
+                                <th>Cost</th>
+                                <th> Selling Price</th>
+                                <th>Quantity</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in stock %}
+                            <tr>
+                                <td>{{ item[0] }}</td> <!-- item_uuid -->
+                                <td>{{ item[1] }}</td> <!-- item_code -->
+                                <td>{{ item[2] }}</td> <!-- invoice_number -->
+                                <td>{{ item[3] }}</td> <!-- item -->
+                                <td>{{ item[4] }}</td> <!-- time -->
+                                <td>{{ item[5] }}</td> <!-- date -->
+                                <td>{{ item[6] }}</td> <!-- cost -->
+                                <td>{{ item[7] }}</td> <!-- price -->
+                                <td>{{ item[8] }}</td> <!-- quantity -->
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        
+                    </tbody>
+                </table>
+                <a href="{{ url_for('add_stock_form') }}" class="btn btn-primary">
+                    Add Item
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
