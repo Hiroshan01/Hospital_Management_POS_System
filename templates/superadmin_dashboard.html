@@ -173,6 +173,7 @@
                                     <th>Cost</th>
                                     <th> Selling Price</th>
                                     <th>Quantity</th>
+                                    <th>Expire date</th>
                                     
                                 </tr>
                             </thead>
@@ -187,7 +188,8 @@
                                     <td>{{ item[5] }}</td> <!-- date -->
                                     <td>{{ item[6] }}</td> <!-- cost -->
                                     <td>{{ item[7] }}</td> <!-- price -->
-                                    <td>{{ item[8] }}</td> <!-- quantity -->
+                                    <td>{{ item[8] }}</td>
+                                    <td>{{ item[9] }}</td> <!-- quantity -->
                                     
                                 </tr>
                                 {% endfor %}
@@ -221,6 +223,7 @@
                                     <th>Cost</th>
                                     <th> Selling Price</th>
                                     <th>Quantity</th>
+                                    <th>Expire date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -235,7 +238,8 @@
                                     <td>{{ item[5] }}</td> <!-- date -->
                                     <td>{{ item[6] }}</td> <!-- cost -->
                                     <td>{{ item[7] }}</td> <!-- price -->
-                                    <td>{{ item[8] }}</td> <!-- quantity -->
+                                    <td>{{ item[8] }}</td>
+                                    <td>{{ item[9] }}</td>
                                     <td>
                                         <a href="{{ url_for('update_stock', item_uuid=item[0]) }}" class="btn btn-warning">
                                             <i class="fas fa-edit"></i> Edit
@@ -274,6 +278,9 @@
                     <th>Address</th>
                     <th>Phone Number</th>
                     <th>Comment</th>
+                    <th>Email</th>
+                    <th>NIC Number</th>
+                  
                     <th>Action</th>
                 </tr>
             </thead>
@@ -283,7 +290,9 @@
                     <td>{{ user[1] }}</td> <!-- user_name -->
                     <td>{{ user[2] }}</td> <!-- address -->
                     <td>{{ user[3] }}</td> <!-- phone_no -->
-                    <td>{{ user[4] }}</td> <!-- comment -->
+                    <td>{{ user[4] }}</td>
+                    <td>{{ user[7] }}</td> <!-- phone_no -->
+                    <td>{{ user[8] }}</td> <!-- comment -->
                     <td>
                         <a href="{{ url_for('update_user', id=user[0]) }}" class="btn btn-primary btn-sm">Update</a>
 

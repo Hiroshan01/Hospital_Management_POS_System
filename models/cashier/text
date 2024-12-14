@@ -1,0 +1,53 @@
+CREATE TABLE cashier_invoices (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    invoice_number VARCHAR(20) NOT NULL UNIQUE,
+    customer_name VARCHAR(100) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    date DATE DEFAULT CURRENT_DATE,
+    time TIME DEFAULT CURRENT_TIME,
+    payment_method ENUM('cash', 'credit_card', 'debit_card', 'other') NOT NULL,
+    status ENUM('paid', 'pending', 'canceled') DEFAULT 'pending',
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users_data(user_id)
+);
+--------------------------------------------------
+auto generate invoice invoice_number
+
+DELIMITER //
+
+CREATE TRIGGER before_insert_cashier_invoices --
+BEFORE INSERT ON cashier_invoices
+FOR EACH ROW
+BEGIN
+    DECLARE new_invoice_number VARCHAR(20); --DECLARE define a veribale 
+    DECLARE last_invoice_number VARCHAR(20); --
+    
+    -- Get the last invoice number for the current year
+    SELECT invoice_number INTO last_invoice_number 
+    FROM cashier_invoices 
+    WHERE invoice_number LIKE CONCAT('INV-', YEAR(CURRENT_DATE), '-%') 
+    ORDER BY invoice_number DESC 
+    LIMIT 1;
+
+    -- Generate the new invoice number
+    IF last_invoice_number IS NULL THEN
+        SET new_invoice_number = CONCAT('INV-', YEAR(CURRENT_DATE), '-00001');
+    ELSE
+        SET new_invoice_number = CONCAT('INV-', YEAR(CURRENT_DATE), '-', LPAD(SUBSTRING_INDEX(last_invoice_number, '-', -1) + 1, 5, '0'));
+    END IF;
+
+    -- Set the new invoice number to the NEW row
+    SET NEW.invoice_number = new_invoice_number;
+END;
+
+//
+
+DELIMITER ;
+
+drop exsiting (DROP TRIGGER IF EXISTS before_insert_cashier_invoices;)
+
+----
+pip install Flask Flask-SQLAlchemy
+
+
+

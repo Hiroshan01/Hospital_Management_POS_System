@@ -4,6 +4,8 @@ from models import user_data #model file in user_data.py
 from typing import Any
 from models import items
 from models.items import get_items
+from models.cashier.cashier import app, get_cashier_invoices
+
 
 
 
@@ -74,10 +76,18 @@ def admin_dashboard():
 def user_dashboard():
      users = user_data.get_users()
      return render_template('user_dashbord.html', users=users)
+#--------------------------Cashier----------------------------------------------------------#
 
 @app.route('/cashier')
 def cashier_dashboard():
-    return render_template('cahier_dashbord.html')
+    invoices = get_cashier_invoices()
+      
+    users = user_data.get_users()
+    return render_template('cahier_dashbord.html',invoices=invoices,users=users)
+
+#-----------------------Cashier End---------------------------------------------------------#
+
+
 
 # SuperAdmin Dashboard Route
 @app.route('/superadmin_db_details')
@@ -112,12 +122,13 @@ def add_stock():
         cost = request.form['cost']
         price = request.form['Selling_price']
         quantity = request.form['quantity']
+        expire_date=request.form['expire_date']
         
         cur = mysql.connection.cursor()
         cur.execute("""
-            INSERT INTO stock (item_uuid, item_code, invoice_number, item, time, date, cost, price, quantity) 
-            VALUES (UUID(), %s, %s, %s, %s, %s, %s, %s, %s)""", 
-            (item_code, invoice_number, item_name, time, date, cost, price, quantity))
+            INSERT INTO stock (item_uuid, item_code, invoice_number, item, time, date, cost, price, quantity,expire_date) 
+            VALUES (UUID(), %s, %s, %s, %s, %s, %s, %s, %s,%s )""", 
+            (item_code, invoice_number, item_name, time, date, cost, price, quantity,expire_date))
         mysql.connection.commit()
         cur.close()
         return redirect(url_for('add_stock_form'))
@@ -190,13 +201,15 @@ def add_user_route():
        user_name = request.form['user_name']
        address = request.form['address']
        phone_no = request.form['phone_no']
+       email=request.form['email']
+       nic=request.form['nic']
        comment = request.form.get('comment', '')
        
        cur= cur = mysql.connection.cursor()
        cur.execute("""
-            INSERT INTO users_data (user_name, address, phone_no, comment) 
-              VALUES (%s, %s, %s, %s)
-    """, (user_name, address, phone_no, comment))
+            INSERT INTO users_data (user_name, address, phone_no,email,nic, comment) 
+              VALUES (%s, %s, %s, %s,%s,%s)
+    """, (user_name, address, phone_no,email,nic, comment))
        mysql.connection.commit()
        cur.close()  
      
@@ -330,6 +343,11 @@ def delete_item_DB(uuid):
         print("Error deleting user:", e)
         mysql.connection.rollback() 
         return redirect(url_for('superadmin_dashboard1')) 
+    
+    
+
+
+
 
 
 
