@@ -4,10 +4,8 @@ from models import user_data #model file in user_data.py
 from typing import Any
 from models import items
 from models.items import get_items
-from models.cashier.cashier import app, get_cashier_invoices
-
-
-
+from models.cashier.cashier import app, get_cashier_invoices,add_invoice
+from models.cust_search.customer_search import search_user_route
 
 
 app = Flask(__name__)
@@ -81,7 +79,7 @@ def user_dashboard():
 @app.route('/cashier')
 def cashier_dashboard():
     invoices = get_cashier_invoices()
-      
+
     users = user_data.get_users()
     return render_template('cahier_dashbord.html',invoices=invoices,users=users)
 
@@ -194,7 +192,7 @@ def add_user_form():
     return render_template('user/add_user.html')
 
 
-# Route to handle adding user
+# Route to handle adding user customer
 @app.route('/add_user_to_', methods=['GET', 'POST'])
 def add_user_route():
     if request.method=='POST':
@@ -217,6 +215,12 @@ def add_user_route():
 
   
     return render_template('user/add_user.html')
+#---------------search users(customer)------------------------#
+@app.route('/search_customer', methods=['GET', 'POST']) #post and get is used to form function
+def search_user():
+    return search_user_route()
+
+#---------------search users(customer)end------------------------#
 
 #--------------------Update users-------------------#
 
@@ -343,6 +347,18 @@ def delete_item_DB(uuid):
         print("Error deleting user:", e)
         mysql.connection.rollback() 
         return redirect(url_for('superadmin_dashboard1')) 
+    
+#-------cahier add---------------------------------------------------------------------#
+@app.route('/add_invoice', methods=['GET', 'POST'])
+def add_invoice_route():
+    return add_invoice(mysql)
+
+@app.route('/add-invoice_form')
+def add_invoice_form():
+      return render_template('cashier/cashier_invoice.html')
+
+
+
     
     
 

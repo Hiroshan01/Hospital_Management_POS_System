@@ -23,7 +23,8 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label for="phone_no">Phone Number</label>
-                    <input type="tel" class="form-control" id="phone_no" name="phone_no" required>
+                    <input type="tel" class="form-control" id="phone_no" name="phone_no" required
+                    pattern="^0[0-9]{9}$" title="Please enter a valid 10-digit phone number"><!--Validation-->
                 </div>
                 <div class="form-group col-md-3">
                     <label for="phone_no">Email</label>
@@ -38,6 +39,7 @@
                     <input type="text" class="form-control" id="comment" name="comment">
                 </div>
             </div>
+            
             <button type="submit" class="btn btn-primary">Add User</button>
             {% if session.role == 'SuperAdmin' %}
             <a href="{{ url_for('superadmin_dashboard1') }}" class="btn btn-secondary">Move Dashboard</a>
@@ -53,6 +55,19 @@
             {% endif %}
 
         </form>
+        <script>
+            document.getElementById("userForm").addEventListener("submit", function(event){
+                const phoneInput=document.getElementById("phone_no")
+                const phoneValue=phoneInput.value;
+
+                const phonePattern="^0[0-9]{9}$";
+
+                
+                if (!phonePattern.test(phoneValue))
+                   alert("Please enter a valid 10-digit phone number.");
+                   event.preventDefault();
+            })
+        </script>
 
        
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

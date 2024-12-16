@@ -90,18 +90,21 @@
                     </div>
                 </div>
             </div>
+            <a href="{{ url_for('search_user') }}" class="btn btn-primary">
+                <i class="fas fa-search"></i> Search Customers
+            </a>
             <h2 class="mt-5 mb-4">Cashire Invoice</h2>
             <table class="table table-striped table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
-                        <th>Invoice Number</th>
+                        
                         <th>Customer Name</th>
                         <th>Amount</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Payment Method</th>
                         <th>Status</th>
-                        <th>User ID</th>
+                        <th>Customer ID</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,22 +117,26 @@
                             <td>{{ invoice[5] }}</td>
                             <td>{{ invoice[6] }}</td>
                             <td>{{ invoice[7] }}</td>
-                            <td>{{ invoice[8] }}</td>
+                            
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <a href="{{ url_for('add_invoice_form') }}" class="btn btn-primary">
+                Add Invoice
+            </a>
         </div>
-        <h2 class="mt-5 mb-4">User List</h2>
+      
+        <h2 class="mt-5 mb-4">Customer List</h2>
             <table class="table table-striped table-bordered table-hover">
                 <thead class="thead-light">
                     <tr>
-                        <th>User ID</th>
-                        <th>User Name</th>
+                        <th>Customer ID</th>
+                        <th>Customer Name</th>
                         <th>Address</th>
                         <th>Phone Number</th>
                         <th>Comment</th>
-                        <th>The Email Of User</th>
+                        <th>The Email Of Customer</th>
                         <th>NIC</th>
                         
                     </tr>
@@ -150,7 +157,7 @@
                     {% endfor %}
                 </tbody>
             </table>
-          
+           
     </div>
     
 
