@@ -31,8 +31,12 @@
                         <label for="phone_no_search" class="form-label">Phone Number</label>
                         <input type="tel" class="form-control" id="phone_no_search" name="phone_no_search" required title="Please enter a valid 10-digit phone number" placeholder="Enter phone number">
                     </div>
-                    <button type="submit" class="btn btn-primary">Search User</button>
+                    <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary mr-3">Search User</button>
+                    <a href="{{ url_for('add_invoice_form') }}" class="btn btn-primary">Invoice</a> 
+                    </div>
                 </form>
+               
             </div>
         </div>
 
@@ -60,13 +64,14 @@
                                 <td>{{ user[2] }}</td>
                                 <td>{{ user[3] }}</td>
                                 <td>{{ user[4] }}</td>
-                                <td>{{ user[5] }}</td>
                                 <td>{{ user[7] }}</td>
                                 <td>{{ user[8] }}</td>
+                               
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+                    
                     
                 </div>
                 
